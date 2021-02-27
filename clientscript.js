@@ -59,7 +59,7 @@
                   oneStrformFile[6],
                   oneStrformFile[7],
                   oneStrformFile[8],
-                  filedate]
+                  dateStamp]
               )
             }
           }

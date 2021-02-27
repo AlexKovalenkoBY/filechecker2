@@ -1,1 +1,1 @@
-SELECT * FROM BP
+SELECT * FROM pp

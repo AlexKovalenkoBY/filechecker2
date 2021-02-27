@@ -33,48 +33,53 @@ const db = new sqlite3.Database(DBSOURCE, sqlite3.OPEN_READWRITE, (err) => {
     console.log('db opened....')
   }
 })
-// проверяем наличие таблиц, при необходимости создаем их.
-/* const sqlCreateBP = 'CREATE TABLE IF NOT EXISTS BP( id INTEGER NOT NULL UNIQUE,\
-            num TEXT,\
-            name TEXT,\
-            owner INTEGER,\
-            shortname TEXT,\
-            detalisationexist NUMERIC,\
-            parent INTEGER,\
-            datebegin TEXT,\
-            dateend TEXT,\
-            dateload TEXT,\
-            PRIMARY KEY(id)\
-            )'
-db.run(sqlCreateBP, (err) => {
-  if (err) {
-    console.log('Table BP already exists.')
-  }
-})
-const sqlCreatePP = 'CREATE TABLE IF NOT EXISTS PP(\
-            idmain INTEGER NOT NULL UNIQUE,\
-            idparent INTEGER NOT NULL UNIQUE,\
-            idpp INTEGER,\
-            numpp TEXT,\
-            namepp TEXT,\
-            managerpp INTEGER,\
-            detalistaionexist INTEGER,\
-            datebegin TEXT,\
-            datechange TEXT,\
-            dateend TEXT,\
-            dateload TEXT,\
-            PRIMARY KEY(idmain)\
-            )'
-db.run(sqlCreatePP, (err) => {
-  if (err) {
-    console.log('Table PP already exists.')
-  }
-})
-*/
 
 // Root path
 app.get('/', (req, res, next) => {
   res.json({ message: 'Ok!' })
+})
+
+app.get('/getallBP', (req, res, next) => {
+  const sql = 'select * from BP'
+  let params = []
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message })
+      return
+    }
+    res.json({
+      message: "запрос обработался успешно! 'select * from BP'",
+      data: rows
+    })
+  })
+})
+app.get('/getallBPwithMaxDate', (req, res, next) => {
+  const sql = 'SELECT * from BP WHERE datestamp = (SELECT MAX(datestamp) as maxdate FROM BP)'
+  let params = []
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message })
+      return
+    }
+    res.json({
+      message: "запрос обработался успешно! 'select * from BP'",
+      data: rows
+    })
+  })
+})
+app.get('/getallPPwithMaxDate', (req, res, next) => {
+  const sql = 'SELECT * from PP WHERE datestamp = (SELECT MAX(datestamp) as maxdate FROM PP)'
+  let params = []
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message })
+      return
+    }
+    res.json({
+      message: "запрос обработался успешно! 'select * from BP'",
+      data: rows
+    })
+  })
 })
 
 app.post('/api/bpload', (req, res, next) => {

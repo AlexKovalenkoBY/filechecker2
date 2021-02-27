@@ -1,0 +1,76 @@
+.chous {
+  width: 580px;
+  height: 50px;
+  border-radius: 4px;
+  text-align: center;
+  margin: 25px;
+  cursor: pointer;
+  display: block;
+  font: 32px Tahoma;
+  transition: all 0.18s ease-in-out;
+  border: 1px solid #d67a4f;
+  background: linear-gradient(
+      to top right,
+      #d67a4f,
+      #ebcbbc 20%,
+      rgba(255, 255, 255, 0) 80%,
+      rgba(255, 255, 255, 0)
+    )
+    top right/500% 500%;
+  color: #d67a4f;
+}
+
+.chous:hover {
+  color: white;
+  background-position: bottom left;
+}
+.proceedbutton {
+  width: 0.1px;
+  border-radius: 15px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+  vertical-align: top;
+}
+.my {
+  width: 0.1px;
+  border-radius: 15px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+  vertical-align: top;
+}
+
+.btn {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+  display: block;
+}
+.label {
+  width: 180px;
+  height: 50px;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  font: 14px/50px Tahoma;
+  transition: all 0.18s ease-in-out;
+  border: 1px solid #333;
+  color: #333;
+}
+
+.label:hover {
+  color: white;
+  background: #333;
+}
+.div {
+  align-items: center;
+}
