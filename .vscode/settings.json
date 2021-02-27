@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50000,
+            "driver": "SQLite",
+            "database": "./bias2021.db",
+            "name": "BP_PP_"
+        }
+    ]
+}
