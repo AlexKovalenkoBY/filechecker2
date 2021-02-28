@@ -89,44 +89,44 @@
       }
       case 'DataTreeSubBP.CSV':
       { // createText("DataTreeBP.CSV");
-          const reader = new FileReader()
-          // let textArray =
-          reader.readAsText(file, 'windows-1251')
-          // dateStamp = file.lastModifiedDate; //file.lastModifiedDate
-          reader.onload = async (/* dateStamp */) => {
-            // B.innerHTML = `<p><pre>${reader.result}</pre></p>`
-            context = reader.result.split('\n')
-            const ppjson = []
-            for (let i = 0; i < context.length; i++) {
-              if (context[i] !== '') {
-                const tempstr = context[i].split('|')
-                const mySet = new Set()
-                // mySet.add(
-                ppjson.push({
-                  idmain: tempstr[0],
-                  idparent: tempstr[1],
-                  idpp: tempstr[2],
-                  numpp: tempstr[3],
-                  namepp: tempstr[4],
-                  managerpp: tempstr[5],
-                  detalistaionexist: tempstr[6],
-                  datebegin: tempstr[7],
-                  datechange: tempstr[8],
-                  dateend: tempstr[9],
-                  dateload: dateStamp
-                })
-              }
+        const reader = new FileReader()
+        // let textArray =
+        reader.readAsText(file, 'windows-1251')
+        // dateStamp = file.lastModifiedDate; //file.lastModifiedDate
+        reader.onload = async (/* dateStamp */) => {
+          // B.innerHTML = `<p><pre>${reader.result}</pre></p>`
+          context = reader.result.split('\n')
+          const ppjson = []
+          for (let i = 0; i < context.length; i++) {
+            if (context[i] !== '') {
+              const tempstr = context[i].split('|')
+              const mySet = new Set()
+              // mySet.add(
+              ppjson.push({
+                idmain: tempstr[0],
+                idparent: tempstr[1],
+                idpp: tempstr[2],
+                numpp: tempstr[3],
+                namepp: tempstr[4],
+                managerpp: tempstr[5],
+                detalistaionexist: tempstr[6],
+                datebegin: tempstr[7],
+                datechange: tempstr[8],
+                dateend: tempstr[9],
+                dateload: dateStamp
+              })
             }
-            try {
-              const url = 'http://localhost:8081/api/ppload'
-              const response = await fetch(url, {
-                method: 'POST', // или 'PUT'
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(ppjson) // данные могут быть 'строкой' или {объектом}!
+          }
+          try {
+            const url = 'http://localhost:8081/api/ppload'
+            const response = await fetch(url, {
+              method: 'POST', // или 'PUT'
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(ppjson) // данные могут быть 'строкой' или {объектом}!
 
-                /* method: 'POST', // или 'PUT'
+              /* method: 'POST', // или 'PUT'
                   mode: 'no-cors',
                   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                   credentials: 'same-origin', // include, *same-origin, omit
@@ -135,18 +135,18 @@
                     'Access-Control-Allow-Origin': 'http://localhost:5500'
                   },
                    body: JSON.stringify(ppjson) // данные могут быть 'строкой' или {объектом}! */
-                // body: mySet // данные могут быть 'строкой' или {объектом}!
-              })
+              // body: mySet // данные могут быть 'строкой' или {объектом}!
+            })
 
-              const json = await response.json()
-              console.log('Успех:', json)
-            } catch (error) {
-              console.error('Ошибка:', error)
-            }
-            // return recordsPP;
+            const json = await response.json()
+            console.log('Успех:', json)
+          } catch (error) {
+            console.error('Ошибка:', error)
           }
-          const s = 0
-          break
+          // return recordsPP;
+        }
+        const s = 0
+        break
       }
       default:
         B.innerHTML = '<h3>Unknown File Format and (or) Filename  !</h3>'
