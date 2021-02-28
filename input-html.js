@@ -1,19 +1,12 @@
-
-// привет, хабр!
-/* $('.my').change(function () {
-  if ($(this).val() !== '') $(this).prev().text('Выбрано файлов: ' + $(this)[0].files.length)
-    else $(this).prev().text('Выберите файлы')
-}) */
-
 ((D, B, log = (arg) => console.log(arg)) => {
   const bpInput = D.getElementById('BPfile')
   const ppInput = D.getElementById('PPfile')
   const bpLabel = D.getElementById('bplabel')
   const startButton = D.getElementById('mainbutton')
-  let contextBP = null
+  let contextBPfile = null
   const diffBP = null
-  let BPSql = null
-
+  let contextBPSql = null
+  const recordsBP = []
   /* ************************************************************************* */
   startButton.addEventListener('click', (button) => {
     console.log('button start proceed')
@@ -35,69 +28,43 @@
 
       const readerPp = new FileReader()
       readerBp.onload = async (e) => {
-        contextBP = e.target.result
-        handleContext(dateStampBP)
+        contextBPfile = e.target.result
+        handlecontextBPfile(dateStampBP)
       }
       readerBp.readAsText(bp, 'windows-1251')
     }
   })
-  function handleContext (dateStampBP) {
-    const context = contextBP.split('\n')
+  function handlecontextBPfile (dateStampBP) {
+    const context = contextBPfile.split('\n')
     let oneStrformFile = null
-    const recordsBP = []
+
     for (let i = 0; i < context.length; i++) {
       oneStrformFile = context[i].split('","')
       if (oneStrformFile !== '') {
         recordsBP.push(
-          [oneStrformFile[0].slice(1),
-            oneStrformFile[1],
-            oneStrformFile[2],
-            oneStrformFile[3],
-            oneStrformFile[4],
-            oneStrformFile[5],
-            oneStrformFile[6],
-            oneStrformFile[7],
-            oneStrformFile[8],
-            dateStampBP]
+          {
+            bp_id_aris: oneStrformFile[0].slice(1),
+            cod_bp_txt: oneStrformFile[4],
+            d_start: oneStrformFile[7],
+            d_stop: oneStrformFile[8],
+            // datestamp: dateStampBP,
+            from_id: oneStrformFile[6],
+            naim_bp: oneStrformFile[2],
+            num_bp: oneStrformFile[1],
+            owner: oneStrformFile[3]
+          }
         )
       }
     }
     const url = 'http://127.0.0.1:8081/getallBPwithMaxDate'
     async function test () {
-      /* const response = await fetch(url)
+      const response = await fetch(url)
       const data = await response.json()
-      return data */
+      contextBPSql = data.data
 
-      const response = await fetch(url /*, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify('')
-
-        } */)
-      const json = response.json()
-      console.log('Успех:', JSON.stringify(json))
+      console.log('Успех:', JSON.stringify(data))
     }
-
-    test().then(data => {
-      console.log(data)
-      BPSql = data.data
-    })
-    /* try {
-         const response = await fetch(url, {
-           method: 'GET',
-           headers: {
-             'Content-Type': 'application/json'
-           },
-           body: JSON.stringify('')
-
-         })
-         const json = response.json()
-         console.log('Успех:', JSON.stringify(json))
-       } catch (error) {
-         console.error('Ошибка:', error)
-       } */
+    test()
     console.log('done....')
   }
   /* ************************************************************************* */

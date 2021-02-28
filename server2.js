@@ -54,7 +54,7 @@ app.get('/getallBP', (req, res, next) => {
 })
 app.get('/getallBPwithMaxDate', (req, res, next) => {
   console.log('started request to all BPwithMaxDate....')
-  const sql = 'SELECT * from BP WHERE datestamp = (SELECT MAX(datestamp) as maxdate FROM BP)'
+  const sql = 'SELECT num_bp, naim_bp, owner, cod_bp_txt, vyd, from_id, d_start, d_stop, bp_id_aris  from BP WHERE (datestamp = (SELECT MAX(datestamp) as maxdate FROM BP)) AND (d_stop !="2100-01-01")'
   let params = []
   db.all(sql, params, (err, rows) => {
     if (err) {
