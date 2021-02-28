@@ -18,10 +18,7 @@ app.use((req, res, next) => {
 })
 const HTTP_PORT = 8081
 
-// Start server
-app.listen(HTTP_PORT, () => {
-  // console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT))
-})
+
 const DBSOURCE = './bias2021.db'
 
 const db = new sqlite3.Database(DBSOURCE, sqlite3.OPEN_READWRITE, (err) => {
@@ -40,7 +37,9 @@ app.get('/', (req, res, next) => {
 })
 
 app.get('/getallBP', (req, res, next) => {
-  const sql = 'select * from BP'
+  const sql = 'SELECT num_bp, naim_bp, owner, cod_bp_txt, vyd, from_id, d_start, d_stop, bp_id_aris, datestamp from BP'
+  
+  console.log('started request to all BP....')
   let params = []
   db.all(sql, params, (err, rows) => {
     if (err) {
@@ -54,6 +53,7 @@ app.get('/getallBP', (req, res, next) => {
   })
 })
 app.get('/getallBPwithMaxDate', (req, res, next) => {
+  console.log('started request to all BPwithMaxDate....')
   const sql = 'SELECT * from BP WHERE datestamp = (SELECT MAX(datestamp) as maxdate FROM BP)'
   let params = []
   db.all(sql, params, (err, rows) => {
@@ -156,4 +156,9 @@ app.post('/api/ppload', (req, res, next) => {
 
   // db.close();
   res.json({ message: 'Ok!' })
+})
+
+// Start server
+app.listen(HTTP_PORT, () => {
+  // console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT))
 })

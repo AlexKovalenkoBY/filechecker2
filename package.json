@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "debugServerjs": "node ./server.js",
-    "debugServer2": "node ./server2.js"
+    "debugServer2": "nodemon ./server2.js"
   },
   "dependencies": {
     "@types/sqlite3": ">=3.1.6",
@@ -34,7 +34,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "es6": true
     },
     "extends": [
       "plugin:vue/essential",

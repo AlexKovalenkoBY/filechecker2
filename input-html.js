@@ -6,11 +6,13 @@
 }) */
 
 ((D, B, log = (arg) => console.log(arg)) => {
-
   const bpInput = D.getElementById('BPfile')
   const ppInput = D.getElementById('PPfile')
   const bpLabel = D.getElementById('bplabel')
   const startButton = D.getElementById('mainbutton')
+  let contextBP = null
+  const diffBP = null
+  let BPSql = null
 
   /* ************************************************************************* */
   startButton.addEventListener('click', (button) => {
@@ -30,12 +32,74 @@
       const dateStampBP = new Date(bp.lastModified).getDate() + '.' + String((new Date(bp.lastModified).getMonth())).replace(/^(\d)$/, '0$1') + '.' + new Date(bp.lastModified).getFullYear()
       const dateStampPP = new Date(pp.lastModified).getDate() + '.' + String((new Date(pp.lastModified).getMonth())).replace(/^(\d)$/, '0$1') + '.' + new Date(pp.lastModified).getFullYear()
       const readerBp = new FileReader()
-      readerBp.readAsText(bp, 'windows-1251')
 
-      const readerPp = new FileReader()          
-      readerPp.readAsText(bp, 'windows-1251')
+      const readerPp = new FileReader()
+      readerBp.onload = async (e) => {
+        contextBP = e.target.result
+        handleContext(dateStampBP)
+      }
+      readerBp.readAsText(bp, 'windows-1251')
     }
   })
+  function handleContext (dateStampBP) {
+    const context = contextBP.split('\n')
+    let oneStrformFile = null
+    const recordsBP = []
+    for (let i = 0; i < context.length; i++) {
+      oneStrformFile = context[i].split('","')
+      if (oneStrformFile !== '') {
+        recordsBP.push(
+          [oneStrformFile[0].slice(1),
+            oneStrformFile[1],
+            oneStrformFile[2],
+            oneStrformFile[3],
+            oneStrformFile[4],
+            oneStrformFile[5],
+            oneStrformFile[6],
+            oneStrformFile[7],
+            oneStrformFile[8],
+            dateStampBP]
+        )
+      }
+    }
+    const url = 'http://127.0.0.1:8081/getallBPwithMaxDate'
+    async function test () {
+      /* const response = await fetch(url)
+      const data = await response.json()
+      return data */
+
+      const response = await fetch(url /*, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify('')
+
+        } */)
+      const json = response.json()
+      console.log('Успех:', JSON.stringify(json))
+    }
+
+    test().then(data => {
+      console.log(data)
+      BPSql = data.data
+    })
+    /* try {
+         const response = await fetch(url, {
+           method: 'GET',
+           headers: {
+             'Content-Type': 'application/json'
+           },
+           body: JSON.stringify('')
+
+         })
+         const json = response.json()
+         console.log('Успех:', JSON.stringify(json))
+       } catch (error) {
+         console.error('Ошибка:', error)
+       } */
+    console.log('done....')
+  }
   /* ************************************************************************* */
   bpInput.addEventListener('change', (button) => {
     log(bpInput.files)
