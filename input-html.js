@@ -43,15 +43,16 @@
       if (oneStrformFile !== '') {
         recordsBP.push(
           {
-            bp_id_aris: oneStrformFile[0].slice(1),
+            bp_id_aris: Number(oneStrformFile[0].slice(1)),
             cod_bp_txt: oneStrformFile[4],
             d_start: oneStrformFile[7],
             d_stop: oneStrformFile[8],
             // datestamp: dateStampBP,
-            from_id: oneStrformFile[6],
+            from_id: Number(oneStrformFile[6]),
             naim_bp: oneStrformFile[2],
             num_bp: oneStrformFile[1],
-            owner: oneStrformFile[3]
+            owner: Number(oneStrformFile[3]),
+            vyd: Number(oneStrformFile[5])
           }
         )
       }
@@ -65,6 +66,7 @@
       console.log('Успех:', JSON.stringify(data))
     }
     test()
+   
     console.log('done....')
   }
   /* ************************************************************************* */
