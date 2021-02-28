@@ -6,10 +6,12 @@
 }) */
 
 ((D, B, log = (arg) => console.log(arg)) => {
+
   const bpInput = D.getElementById('BPfile')
   const ppInput = D.getElementById('PPfile')
   const bpLabel = D.getElementById('bplabel')
   const startButton = D.getElementById('mainbutton')
+
   /* ************************************************************************* */
   startButton.addEventListener('click', (button) => {
     console.log('button start proceed')
@@ -28,40 +30,10 @@
       const dateStampBP = new Date(bp.lastModified).getDate() + '.' + String((new Date(bp.lastModified).getMonth())).replace(/^(\d)$/, '0$1') + '.' + new Date(bp.lastModified).getFullYear()
       const dateStampPP = new Date(pp.lastModified).getDate() + '.' + String((new Date(pp.lastModified).getMonth())).replace(/^(\d)$/, '0$1') + '.' + new Date(pp.lastModified).getFullYear()
       const readerBp = new FileReader()
-      const readerPp = new FileReader()
       readerBp.readAsText(bp, 'windows-1251')
-      readerBp.onload = ev => {
-        const text = readerBp.result
-        let t = ev
-      }
-      
 
-
-      const recordsBP = readerBp.onloadend = async () => {
-        const context = readerBp.result.split('\n')
-        let oneStrformFile = ''
-        for (let i = 0; i < context.length; i++) { // считали файл ВР
-          oneStrformFile = context[i].split('","')
-          if (oneStrformFile !== '') {
-            recordsBP.push(
-              [oneStrformFile[0].slice(1),
-                oneStrformFile[1],
-                oneStrformFile[2],
-                oneStrformFile[3],
-                oneStrformFile[4],
-                oneStrformFile[5],
-                oneStrformFile[6],
-                oneStrformFile[7],
-                oneStrformFile[8],
-                dateStampBP]
-            )
-          }
-        }
-        
-      }
-      let t=0;
-      readerPp.readAsText(pp, 'windows-1251')
-      readerPp.onloadend = async (dateStampPP) => {}
+      const readerPp = new FileReader()          
+      readerPp.readAsText(bp, 'windows-1251')
     }
   })
   /* ************************************************************************* */
