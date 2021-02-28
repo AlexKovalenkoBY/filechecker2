@@ -12,18 +12,17 @@
 
 <body>
     <div class="dada">
-        <label for="myfile" class="chous">Выберите файл БП</label>
-        <input type="file" class="my" id="myfile" name="myfile" multiple="multiple" />
+        <label for="BPfile" class="chous" id='bplabel'>Выберите файл БП</label>
+        <input type="file" class="my" id="BPfile" name="myfile" accept='.csv'/>
     </div>
 
     <div class="dada">
-        <label for="myfile2" class="chous">Выберите файл ПП</label>
-        <input type="file" class="my" id="myfile2" name="myfile2" multiple="multiple" />
+        <label for="PPfile" class="chous" id='pplabel'>Выберите файл ПП</label>
+        <input type="file" class="my" id="PPfile" name="myfile2"  accept='.csv'/>
     </div>
-<div >
-    <label for ='compare' class="chous" >Приступить к  сравнению</label>
-    <input value="Приступить к сравнению" id="proceed" type="button" >  
-</div>
+<div class="dada">
+    <label for ='compare' id = 'mainbutton' class="chous" >Приступить к  сравнению</label>
+</div >
 
 
     <script src="./input-html.js" defer>
