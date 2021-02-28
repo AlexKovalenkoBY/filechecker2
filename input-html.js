@@ -64,9 +64,57 @@
       contextBPSql = data.data
 
       console.log('Успех:', JSON.stringify(data))
+
+        const diff1 = getDifference(recordsBP, contextBPSql)
+        const diff2 = getDifference(contextBPSql, recordsBP)
+        
     }
     test()
-   
+    function object_equals (x, y) {
+      for (var p in x) {
+        if (x[p] === y[p]) continue
+        // if they have the same strict value or identity then they are equal
+
+        if (typeof (x[p]) !== 'object') return false
+        // Numbers, Strings, Functions, Booleans must be strictly equal
+
+        if (!object_equals(x[p], y[p])) return false
+        // Objects and Arrays must be tested recursively
+      }
+
+      for (p in y) {
+        if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) { return false }
+      }
+      // allows x[ p ] to be set to undefined
+
+      return true
+    }
+    function getDifference (a, b) {
+      const diff = []
+      let flag = false
+      for (let i = 0; i < a.length; i++) {
+        flag = false
+        for (let j = 0; j < b.length; j++) {
+          if (
+          (a[i].naim_bp !==    b[j].naim_bp) ||
+          (a[i].bp_id_aris !== b[j].bp_id_aris) ||
+          (a[i].cod_bp_txt !== b[j].cod_bp_txt) ||
+          (a[i].d_stop !==     b[j].d_stop) ||
+          (a[i].cod_bp_txt !== b[j].cod_bp_txt) ||
+          (a[i].from_id !==    b[j].cod_bp_txt) ||
+          (a[i].num_bp !==     b[j].num_bp) ||
+          (a[i].owner !==      b[j].owner) ||
+          (a[i].vyd !==        b[j].vyd)
+          ) {
+            flag = true
+          }
+        }
+        if (flag) diff.push(a[i])
+      }
+      return diff
+    }
+    // let difference = recordsBP.filter(x => !contextBPSql.includes(x));
+    
     console.log('done....')
   }
   /* ************************************************************************* */
