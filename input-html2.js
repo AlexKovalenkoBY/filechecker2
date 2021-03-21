@@ -7,10 +7,6 @@
     const diffBP = null
     let contextBPSql = null
     const recordsBP = []
-    let contextPPfile = null
-    const diffPP = null
-    let contextPPSql = null
-    const recordsPP = []
         /* ************************************************************************* */
     startButton.addEventListener('click', (button) => {
         console.log('button start proceed')
@@ -26,30 +22,11 @@
             for (let i = 0; i < to_hide.length; i++) {
                 to_hide[i].hidden = true
             }
-
+            console.log('элементы скрыты')
             let new_row = D.createElement('div');
             new_row.className = "loader"
             B.appendChild(new_row)
             console.log('loader created')
-
-            const dateStampBP = new Date(bp.lastModified).getDate() + '.' + String((new Date(bp.lastModified).getMonth())).replace(/^(\d)$/, '0$1') + '.' + new Date(bp.lastModified).getFullYear()
-            const dateStampPP = new Date(pp.lastModified).getDate() + '.' + String((new Date(pp.lastModified).getMonth())).replace(/^(\d)$/, '0$1') + '.' + new Date(pp.lastModified).getFullYear()
-            const readerBp = new FileReader()
-            readerBp.onload = async(e) => {
-                contextBPfile = e.target.result
-                handlecontextBPfile(dateStampBP)
-                    // скрыть спинер
-                B.removeChild(new_row)
-            }
-            readerBp.readAsText(bp, 'windows-1251')
-
-            const readerPp = new FileReader()
-            readerPp.onload = async(e) => {
-                contextPpfile = e.target.result
-                    //  handlecontextBPfile(dateStampBP)
-                    // скрыть спинер
-            }
-            readerPp.readAsText(bp, 'windows-1251')
 
         }
     })
@@ -81,7 +58,7 @@
             const data = await response.json()
             contextBPSql = data.data
 
-            console.log('Успех:', JSON.stringify(data))
+            console.log('БП считаны отовсюду. Успех:', JSON.stringify(data))
 
             const diff1 = getDifference(recordsBP, contextBPSql)
             const diff2 = getDifference(contextBPSql, recordsBP)
@@ -162,7 +139,5 @@
         log(file)
         const dateStamp = file.lastModified
     })
-    ppInput.addEventListener('click', (button) => {
-
-    })
+    ppInput.addEventListener('click', (button) => {})
 })(document, document.body)
