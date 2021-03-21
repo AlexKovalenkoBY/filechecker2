@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+
 ((D, B, log = (arg) => console.log(arg)) => {
     const bpInput = D.getElementById('BPfile')
     const ppInput = D.getElementById('PPfile')
@@ -13,7 +14,7 @@
     let contextPPSql = null
     const recordsPP = []
         /* ************************************************************************* */
-    startButton.addEventListener('click', (button) => {
+    startButton.addEventListener('click', async(_button) => {
         console.log('button start proceed')
         const bp = document.getElementById('BPfile').files[0]
         const pp = document.getElementById('PPfile').files[0]
@@ -27,49 +28,67 @@
             for (let i = 0; i < to_hide.length; i++) {
                 to_hide[i].hidden = true
             }
+
+            let spinner = D.createElement('div');
+            spinner.className = "loader"
+            B.appendChild(spinner)
+            console.log('Spiner  created')
+
             const dateStampBP = new Date(bp.lastModified).getDate() + '.' + String((new Date(bp.lastModified).getMonth())).replace(/^(\d)$/, '0$1') + '.' + new Date(bp.lastModified).getFullYear()
             const dateStampPP = new Date(pp.lastModified).getDate() + '.' + String((new Date(pp.lastModified).getMonth())).replace(/^(\d)$/, '0$1') + '.' + new Date(pp.lastModified).getFullYear()
-            const readerBp = new FileReader()
-            readerBp.onload = async(e) => {
-                contextBPfile = e.target.result
-
-                let t = 0;
-                const context = e.target.result.split('\n')
-                let oneStrformFile = null
-
-                for (let i = 0; i < context.length; i++) {
-                    oneStrformFile = context[i].split('","')
-                    if (oneStrformFile !== '') {
-                        recordsBP.push({
-                            bp_id_aris: Number(oneStrformFile[0].slice(1)),
-                            cod_bp_txt: oneStrformFile[4],
-                            d_start: oneStrformFile[7],
-                            d_stop: oneStrformFile[8],
-                            // datestamp: dateStampBP,
-                            from_id: Number(oneStrformFile[6]),
-                            naim_bp: oneStrformFile[2],
-                            num_bp: oneStrformFile[1],
-                            owner: Number(oneStrformFile[3]),
-                            vyd: Number(oneStrformFile[5])
-                        })
-                    }
+            const bpfileContent = await readUploadedFileAsText(bp)
+            let bppp = bpfileContent.split('\n')
+            for (let i = 0; i < bppp.length; i++) {
+                let oneStrformFile = bppp[i].split('","')
+                if (oneStrformFile !== '') {
+                    recordsBP.push({
+                        bp_id_aris: Number(oneStrformFile[0].slice(1)),
+                        cod_bp_txt: oneStrformFile[4],
+                        d_start: oneStrformFile[7],
+                        d_stop: oneStrformFile[8],
+                        // datestamp: dateStampBP,
+                        from_id: Number(oneStrformFile[6]),
+                        naim_bp: oneStrformFile[2],
+                        num_bp: oneStrformFile[1],
+                        owner: Number(oneStrformFile[3]),
+                        vyd: Number(oneStrformFile[5])
+                    })
                 }
-                //const dbRec = getBPfromDB()
-                const url = 'http://127.0.0.1:8081/getallBPwithMaxDate'
-                const response = await fetch(url)
-                const data = await response.json()
-                contextBPSql = data.data
-                console.log('Успех:', JSON.stringify(data))
+            }
+            const url = 'http://127.0.0.1:8081/getallBPwithMaxDate'
+            const response = await fetch(url)
+            const data = await response.json()
+            contextBPSql = data.data
+            console.log('Успех BP:', JSON.stringify(data))
+                // считываем ПП 
+            const ppfileContent = await readUploadedFileAsText(pp)
+            const contextpp = ppfileContent.split('\n')
+            for (let i = 0; i < contextpp.length; i++) {
+                let oneStrformFile = contextpp[i].split('|')
+                if (oneStrformFile !== '') {
+                    recordsPP.push({
+                        id_aris_parent_bp: Number(oneStrformFile[0]),
+                        id_aris_parent_sub_bp: Number(oneStrformFile[1]),
+                        sub_bp_id_aris: Number(oneStrformFile[2]),
+                        num_sub_bp: oneStrformFile[3],
+                        naim_sub_bp: oneStrformFile[4],
+                        owner: Number(oneStrformFile[5]),
+                        vyd: oneStrformFile[6],
+                        d_start: oneStrformFile[7],
+                        d_stop: oneStrformFile[8]
+                    })
+                }
 
             }
-            readerBp.readAsText(bp, 'windows-1251')
+            const urlpp = 'http://127.0.0.1:8081/getallPPwithMaxDate'
+            const responsepp = await fetch(urlpp)
+            const datapp = await responsepp.json()
+            contextPPSql = datapp.data
+            console.log('Успех c PP :', JSON.stringify(datapp))
+            console.log('start procceed files')
+
         } // else когда все имена файлов присутствуют 
-        // начаинаем читать ПП 
 
-
-
-
-        //const dbrec = getBPfromDB();
     })
 
 
@@ -82,7 +101,7 @@
         return data.data
 
     }
-    async function handlecontextBPfile(dateStampBP) {
+    async function handlecontextBPfile(_dateStampBP) {
         const context = contextBPfile.split('\n')
         let oneStrformFile = null
 
@@ -182,7 +201,23 @@
         log(file)
         const dateStamp = file.lastModified
     })
-    ppInput.addEventListener('click', (button) => {
+    ppInput.addEventListener('click', (_button) => {
 
     })
+
+    function readUploadedFileAsText(inputFile) {
+        const temporaryFileReader = new FileReader();
+
+        return new Promise((resolve, reject) => {
+            temporaryFileReader.onerror = () => {
+                temporaryFileReader.abort();
+                reject(new DOMException("Problem parsing input file."));
+            }
+
+            temporaryFileReader.onload = () => {
+                resolve(temporaryFileReader.result)
+            }
+            temporaryFileReader.readAsText(inputFile, 'windows-1251')
+        })
+    }
 })(document, document.body)

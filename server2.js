@@ -75,7 +75,7 @@ app.get('/getallPPwithMaxDate', (req, res, next) => {
             return
         }
         res.json({
-            message: "запрос обработался успешно! 'select * from BP'",
+            message: "запрос обработался успешно! 'select * from PP'",
             data: rows
         })
     })
