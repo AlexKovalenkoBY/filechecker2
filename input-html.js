@@ -86,7 +86,11 @@
             contextPPSql = datapp.data
             console.log('Успех c PP :', JSON.stringify(datapp))
             console.log('start procceed files')
+                /****** сверка контента   *********************** * */
+            let newinBP = [];
+            let newinPP = [];
 
+            /****** конец сверка контента   *********************** * */
         } // else когда все имена файлов присутствуют 
 
     })

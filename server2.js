@@ -67,6 +67,7 @@ app.get('/getallBPwithMaxDate', (req, res, next) => {
     })
 })
 app.get('/getallPPwithMaxDate', (req, res, next) => {
+    console.log('started request to all PPwithMaxDate....')
     const sql = 'SELECT * from PP WHERE datestamp = (SELECT MAX(datestamp) as maxdate FROM PP)'
     const params = []
     db.all(sql, params, (err, rows) => {
