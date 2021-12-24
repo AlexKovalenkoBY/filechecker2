@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-case-declarations */
-
 ((D, B, log = (arg) => console.log(arg)) => {
     const dropZone = D.querySelector('div')
     const input = D.querySelector('input')
@@ -20,15 +17,57 @@
     let context = []
     const recordsBP = []
     let oneStrformFile = ''
-    const handleFile = (file) => {
+    const handleFile = async(file) => {
         dropZone.remove()
         input.remove()
-        const allowedFiles = ['SD_workman.xml', 'apbstr.000.txt']
+        const allowedFiles = ['SD_workman.xml', 'apbstr.000.txt', 'DataTreeBP.CSV', 'DataTreeSubBP.CSV']
         if (
             allowedFiles.indexOf(file.name) == -1
         ) { return }
 
         switch (file.name) {
+            case 'DataTreeBP.CSV':
+                {
+                    const url = 'http://127.0.0.1:8888/api/uploadfilesfromclient'
+                    try {
+                        let reader = new FileReader()
+                            // reader.readAsArrayBuffer(file)
+                        reader.readAsDataURL(file)
+                        reader.onloadend = async function() {
+                            let content = reader.result;
+                            const base64String = content;
+                            // try {
+                            const result = await fetch(url, {
+                                method: 'POST', // или 'PUT'
+                                headers: {
+                                    "Accept": "application/json",
+                                    "Content-Type": "application/json",
+                                    "Accept-Encoding": "gzip",
+                                    "Access-Control-Allow-Origin": "*",
+                                    "Content-Transfer-Encoding": "base64"
+                                },
+                                body: JSON.stringify({
+                                        content: base64String,
+                                        name: file.name,
+                                        lastModified: file.lastModified,
+                                        size: file.size
+                                    }) // данные могут быть 'строкой' или {объектом}!
+                            });
+                            const outtext = await result.text();
+
+                            B.innerHTML = '<h3>' + outtext + '!</h3>'
+                            const timer = setTimeout(() => {
+                                location.reload()
+                                clearTimeout(timer)
+                            }, 5000);
+                        };
+                    } catch (error) {
+                        console.error('Ошибка:', error)
+                    }
+
+
+                    break;
+                }
             case 'SD_workman.xml':
                 {
                     // createText("DataTreeBP.CSV");
@@ -38,7 +77,7 @@
                     const codepage = 'UTF-8'
                     reader.onloadend = async() => {
                         let content = reader.result;
-                        const url = 'http://8-15604.ds.bapb.internal:8888/api/uploadfilesfromclient/'
+                        const url = 'http://8-15604.ds.bapb.internal:8888/api/uploadfilesfromclient'
                         try {
                             const response = await fetch(url, {
                                 method: 'POST', // или 'PUT'
